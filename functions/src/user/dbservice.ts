@@ -1,13 +1,15 @@
 import * as admin from 'firebase-admin'
 import {
   UserSignupPayLoad,
-  UserLevelUpdatePayload
+  UserLevelUpdatePayload,
+  UserStatsPayload
 } from './structs'
 import { userError } from './error'
 import {
   db,
   COLLECTION,
-  USER_FIELDS
+  USER_FIELDS,
+  USER_STATS_FIELDS
 } from '../utils/firestore'
 import CustomError from '../utils/customError'
 
@@ -97,6 +99,27 @@ export const updateUserLevel = async (payload: UserLevelUpdatePayload) => {
     .update(update_data)
 
   return usersRef
+}
+
+export const saveUserStats = async (
+  payload: UserStatsPayload
+) => {
+  const { user_email, time_to_solve, user_level } = payload
+
+  const newUserStatDocRef: FirebaseFirestore.DocumentReference = db
+    .collection(COLLECTION.USER_STATS)
+    .doc()
+
+  const user_stat = {
+    [USER_STATS_FIELDS.USER_EMAIL]: user_email,
+    [USER_STATS_FIELDS.USER_LEVEL]: user_level,
+    [USER_STATS_FIELDS.TIME_TO_SOLVE]: time_to_solve,
+    [USER_FIELDS.CREATED_TS]: new Date()
+  }
+
+  // Add User Stat
+  const newUserStatDoc = await newUserStatDocRef.set(user_stat)
+  return newUserStatDoc
 }
 
 export const getUserLevel = async (user_email: string) => {

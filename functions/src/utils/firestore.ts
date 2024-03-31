@@ -7,7 +7,8 @@ export const init = (database: FirebaseFirestore.Firestore) => {
 
 /* DB Collections Name */
 export const enum COLLECTION {
-  USERS = 'Users'
+  USERS = 'Users',
+  USER_STATS = 'User_stats'
 }
 
 // User Fields
@@ -20,4 +21,13 @@ export const enum USER_FIELDS {
   PASSWORD = 'user_pswd',
   LEVEL = 'user_level',
   CREATED_TS = 'created_ts'
+}
+
+// User Stats Fields
+export const enum USER_STATS_FIELDS {
+  USER_EMAIL = 'user_email',
+  USER_GUID = 'user_guid',
+  USER_LEVEL = 'user_level',
+  TIME_TO_SOLVE = 'time_to_solve',
+  CREATED_TS = 'created_ts',
 }

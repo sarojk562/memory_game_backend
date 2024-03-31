@@ -1,4 +1,4 @@
-import { USER_FIELDS } from '../utils/firestore'
+import { USER_FIELDS, USER_STATS_FIELDS } from '../utils/firestore'
 
 /* USER */
 
@@ -15,6 +15,12 @@ export interface UserLevelUpdatePayload {
   user_id: string
   [USER_FIELDS.USER_EMAIL]: string
   [USER_FIELDS.LEVEL]: number
+}
+
+export interface UserStatsPayload {
+  [USER_STATS_FIELDS.USER_EMAIL]: string
+  [USER_STATS_FIELDS.USER_LEVEL]: number
+  [USER_STATS_FIELDS.TIME_TO_SOLVE]: number
 }
 
 export interface FirebaseUserPayload {

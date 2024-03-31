@@ -3,7 +3,7 @@ import * as constants from '../utils/constants'
 import { AppError, AppSuccess } from '../utils/response'
 import CustomError from '../utils/customError'
 import { userError } from './error'
-import { UserLevelUpdatePayload, UserSignupPayLoad } from './structs'
+import { UserLevelUpdatePayload, UserSignupPayLoad, UserStatsPayload } from './structs'
 import * as service from './service'
 import * as admin from 'firebase-admin'
 
@@ -123,6 +123,10 @@ export const getUserLevel = async (req: Request, res: Response) => {
 export const saveUserStats = async (req: Request, res: Response) => {
   console.log('+++++++++++++++++++ saveUserStats +++++++++++++++++++')
   try {
+    const payload: UserStatsPayload = req.body
+    
+    await service.saveUserStats(payload)
+
     return res.status(constants.CREATE_SUCCESS_CODE).send({message : "Data Saved Successfully!"})
   } catch (err) {
     return handleError(res, err)

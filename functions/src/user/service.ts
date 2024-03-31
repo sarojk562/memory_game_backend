@@ -6,6 +6,7 @@ import {
   UserSignupPayLoad,
   FirebaseUserPayload,
   UserLevelUpdatePayload,
+  UserStatsPayload,
 } from './structs'
 
 /*
@@ -113,6 +114,18 @@ export const getUserLevel = async (user_email: string) => {
   const result = await dbService.getUserLevel(user_email)
   
   return result.user_level
+}
+
+export const saveUserStats = async (payload: UserStatsPayload) => {
+  const { user_email, user_level, time_to_solve } = payload
+
+  if (!user_email || !user_email.length || !user_level || !time_to_solve) {
+    throw new CustomError(userError.validation.missingfield)
+  }
+
+  const result = await dbService.saveUserStats(payload)
+
+  return result
 }
 
 // Delete User
