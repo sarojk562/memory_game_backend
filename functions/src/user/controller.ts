@@ -113,8 +113,14 @@ export const getUserLevel = async (req: Request, res: Response) => {
     const { user_email } = req.params
 
     const result = await service.getUserLevel(user_email)
+    
+    const success_response: AppSuccess = {
+      status: constants.SUCCESS_MSG,
+      code: constants.SUCCESS_CODE,
+      data: result
+    }
 
-    return res.status(constants.SUCCESS_CODE).json({level: result})
+    return res.status(constants.SUCCESS_CODE).json(success_response)
   } catch (err) {
     return handleError(res, err)
   }

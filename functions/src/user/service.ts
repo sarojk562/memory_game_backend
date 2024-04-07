@@ -113,7 +113,11 @@ export const getUserLevel = async (user_email: string) => {
 
   const result = await dbService.getUserLevel(user_email)
   
-  return result.user_level
+  return {
+    user_level: result.user_level,
+    day: result.day,
+    hasPlayedToday: result.hasPlayedToday
+  }
 }
 
 export const saveUserStats = async (payload: UserStatsPayload) => {

@@ -150,6 +150,54 @@ export const getUserLevel = async (user_email: string) => {
     result.push(data)
   })
 
+  const userStatsRef: FirebaseFirestore.CollectionReference = db.collection(
+    COLLECTION.USER_STATS
+  )
+
+  // get the existing user stats for the user email
+  const userStatsQuery: FirebaseFirestore.Query = userStatsRef.where(
+    USER_STATS_FIELDS.USER_EMAIL,
+    '==',
+    user_email.toLowerCase().trim()
+  )
+  const userStatsSnapshot: FirebaseFirestore.QuerySnapshot = await userStatsQuery.get()
+
+  if (userStatsSnapshot.empty) {
+    // do nothing send level 1 and day 1
+    result[0].day = 1
+    result[0].hasPlayedToday = false
+  } else {
+    const userStatsResult: any[] = []
+    userStatsSnapshot.forEach((doc) => {
+      const data = doc.data()
+      data.uid = doc.id
+      userStatsResult.push(data)
+    });
+
+    let hasPlayedToday = false;
+    let oldestDate: Date | null = null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    for (const userStat of userStatsResult) {
+      const createdDate = userStat[USER_FIELDS.CREATED_TS].toDate();
+      createdDate.setHours(0, 0, 0, 0);
+      
+      if (createdDate.getTime() === today.getTime()) {
+        hasPlayedToday = true;
+      }
+
+      if (!oldestDate || createdDate < oldestDate) {
+        oldestDate = createdDate;
+      }
+    }
+
+    result[0].hasPlayedToday = hasPlayedToday;
+    const currentDate = new Date();
+    const timeDiff = oldestDate ? Math.abs(currentDate.getTime() - oldestDate.getTime()) : 0;
+    result[0].day = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  }
+
   return result[0]
 }
 
