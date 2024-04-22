@@ -122,6 +122,22 @@ export const saveUserStats = async (
   return newUserStatDoc
 }
 
+export const getUserStats = async () => {
+  const userStatsRef: FirebaseFirestore.CollectionReference = db.collection(
+    COLLECTION.USER_STATS
+  )
+
+  const snapshot: FirebaseFirestore.QuerySnapshot = await userStatsRef.get();
+  const result: any[] = [];
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    result.push(data);
+  });
+  
+  return result;
+}
+
 export const getUserLevel = async (user_email: string) => {
   if (!user_email || !user_email.length) {
     throw new CustomError(userError.validation.missingfield)

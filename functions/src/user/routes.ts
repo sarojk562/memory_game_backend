@@ -5,7 +5,8 @@ import {
   deleteUser,
   getUserLevel,
   saveUserStats,
-  updateUserLevel
+  updateUserLevel,
+  getUserStats
 } from './controller'
 
 const router = Router()
@@ -38,5 +39,8 @@ router.get('/getUserLevel/:user_email', [getUserLevel])
 
 // save user level stats
 router.post('/saveUserStats', [saveUserStats])
+
+// get user level stats
+router.get('/get_all', [getUserStats])
 
 export default router

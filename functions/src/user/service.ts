@@ -132,6 +132,12 @@ export const saveUserStats = async (payload: UserStatsPayload) => {
   return result
 }
 
+export const getUserStats = async () => {
+  const result = await dbService.getUserStats()
+
+  return result
+}
+
 // Delete User
 export const deleteUser = async (user_id: string) => {
   // Checks
