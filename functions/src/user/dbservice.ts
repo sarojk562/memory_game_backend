@@ -122,18 +122,46 @@ export const saveUserStats = async (
   return newUserStatDoc
 }
 
-export const getUserStats = async () => {
-  const userStatsRef: FirebaseFirestore.CollectionReference = db.collection(
-    COLLECTION.USER_STATS
+export const getUsers = async () => {
+  const usersRef: FirebaseFirestore.CollectionReference = db.collection(
+    COLLECTION.USERS
   )
 
-  const snapshot: FirebaseFirestore.QuerySnapshot = await userStatsRef.get();
+  const snapshot: FirebaseFirestore.QuerySnapshot = await usersRef.get();
   const result: any[] = [];
   snapshot.forEach((doc) => {
     const data = doc.data();
     data.id = doc.id;
     result.push(data);
   });
+
+  return result;
+}
+
+export const getUserStats = async (user_email: string) => {
+  const userStatsRef: FirebaseFirestore.CollectionReference = db.collection(
+    COLLECTION.USER_STATS
+  )
+
+  const query: FirebaseFirestore.Query = await userStatsRef.where(
+    USER_STATS_FIELDS.USER_EMAIL,
+    '==',
+    user_email.toLowerCase().trim()
+  );
+
+  const snapshot: FirebaseFirestore.QuerySnapshot = await query.get()
+
+  if (snapshot.empty) {
+    console.log(`No matching document of USERS with email as ${user_email}`)
+    return
+  }
+
+  const result: any[] = []
+  snapshot.forEach((doc) => {
+    const data = doc.data()
+    data.uid = doc.id
+    result.push(data)
+  })
   
   return result;
 }
