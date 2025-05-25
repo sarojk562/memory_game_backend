@@ -26,6 +26,27 @@ export const getUserLevel = async (req: Request, res: Response) => {
   }
 }
 
+export const getUserStats = async (req: Request, res: Response) => {
+  console.log('+++++++++++++++++++ getUserStats +++++++++++++++++++')
+
+  const user_level = req.query.user_level
+  if (typeof user_level !== 'string') {
+    return handleError(res, { message: 'Invalid or missing user_level parameter', code: 400 })
+  }
+
+  try {
+    const result = await service.getUserStats(user_level)
+    const success_response: AppSuccess = {
+      status: constants.SUCCESS_MSG,
+      code: constants.SUCCESS_CODE,
+      data: result
+    }
+    return res.status(constants.SUCCESS_CODE).json(success_response)
+  } catch (err) {
+    return handleError(res, err)
+  }
+}
+
 /* Private Functions */
 
 const handleError = async (res: Response, err: any) => {

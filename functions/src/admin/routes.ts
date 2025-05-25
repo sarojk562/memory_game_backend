@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import {
-  getUserLevel
+  getUserLevel,
+  getUserStats
 } from './controller'
 
 const router = Router()
@@ -19,5 +20,8 @@ router.use((req: Request, res: Response, next: Function) => {
 
 // get user level
 router.get('/getUserLevel', [getUserLevel])
+
+// get user stats
+router.get('/getUserStats', [getUserStats])
 
 export default router

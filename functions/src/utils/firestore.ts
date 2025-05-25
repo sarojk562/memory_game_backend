@@ -14,7 +14,8 @@ export const enum COLLECTION {
 
 // Admin Fields
 export const enum ADMIN_FIELDS { 
-  LEVEL = 'user_level'
+  LEVEL = 'user_level',
+  ENTROPY = 'entropy_stats'
 }
 
 // User Fields
