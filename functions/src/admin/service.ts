@@ -56,7 +56,6 @@ export const getUserLevel = async () => {
 export const getUserStats = async (user_level: string) => {
   const currentEntropy = +(Math.random() * (4 - 1.5) + 1.5).toFixed(2);
 
-  await dbService.updateUserStats(currentEntropy);
   const result = await dbService.getUserStats();
   // If entropy_stats has more than 15 values, keep only the last 15
   if (Array.isArray(result.entropy_stats) && result.entropy_stats.length > 15) {
@@ -65,6 +64,7 @@ export const getUserStats = async (user_level: string) => {
 
   const images = userLevelImages[user_level] || [];
   const heat_map_image = images.length > 0 ? images[Math.floor(Math.random() * images.length)] : '';
+  await dbService.updateUserStats(currentEntropy);
 
   return {
     entropy_stats: result.entropy_stats,
